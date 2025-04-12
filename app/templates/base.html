@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px; /* Largura da sidebar */
+            height: 100vh; /* Ocupa toda a altura da tela */
+            background-color: #f4f4f4; /* Cor de fundo suave */
+            padding: 20px;
+            position: fixed; /* Fixa na lateral */
+            left: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto; /* Adiciona scroll se precisar */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra lateral */
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar ul li {
+            margin: 10px 0;
+            padding: 12px;
+            background: #ddd; /* Cor dos itens */
+            border-radius: 8px; /* Bordas arredondadas */
+            text-align: center;
+            transition: 0.3s;
+        }
+        
+        .sidebar ul li:hover {
+            background: #bbb; /* Efeito ao passar o mouse */
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+
+
+        }
+
+        .content {
+            margin-left: 250px; /* Para não sobrepor a sidebar */
+            padding: 20px;
+            background: #fff;
+            overflow-y: auto; /* Se precisar de rolagem */
+        }
+
+        .post-box {
+            background: #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .post {
+            background: #ccc;
+            border: 2px solid black;
+            padding-left: 60px;
+            gap: 20px;
+            
+        }
+        .card {
+            margin-left: 18.5rem;
+            width: 150vh;
+
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>LinkUp</h2>
+        <div class="side">
+            <ul>
+                <li><img src="/hom.png"><a href="#">Home</a></li>
+                <li><a href="#">Buscar</a></li>
+                <li><a href="{% url 'post_form' %}">Criar</a></li>
+                <li><a href="#">Notificações</a></li>
+                <li><a href="#">Mensagens</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'logout' %}">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+    <main class="card">
+        {% block content %}
+        
+        {% endblock %}
+    </main>
+    
+</body>
+</html>

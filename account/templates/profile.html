@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ request.user.username }}
+    {{ profile.bio }}
+    {{ profile.birthdate }}
+    {{profile.profile.profile_picture }}
+
+    <button><a href="{% url 'profile_form' %}">Editar Perfil</a></button>     
+{% endblock %}

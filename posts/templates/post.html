@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+<div class="card">
+    {% block content %}
+        <div>
+            <div class="post-box">
+                <input type="text" placeholder="O que está acontecendo..." style="width: 300px; height: 200px; object-fit: cover;">
+                <button>Postar</button>
+            </div>
+            
+            {% for post in posts %}
+                {% csrf_token %}
+                <div class="post">
+                    <h2>{{ post.usuario.username }}</h2>
+                    <p><strong>{{ post.title }}</strong></p>
+                    <p>{{ post.publication_date }}</p>
+                    <p>{{ post.content }}</p>
+                        
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="Imagem do post" style="width: 300px; height: 200px; object-fit: cover;">
+                    {% else %}
+                        <p>Sem imagem</p>
+                    {% endif %}    
+                    <div>  
+                        <div>
+                            <button>Excluir</button>
+                        </div>
+                        <button><img src="/icons/add.png" alt="adicionar">Comment</button>
+                        <button>Repost</button>
+                        <button>Save</button>
+                        <button>Download</button>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endblock %}
+</div>

@@ -1,0 +1,8 @@
+
+{% block content %}
+    <form method='post' enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ post_form }}
+        <input type="submit" value="Criar">
+    </form>
+{% endblock %}

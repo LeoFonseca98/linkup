@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+       <div class="form-group"> 
+            {{ profile.errors }}
+            <label>Bio: </label>
+            {{ profile.bio }}
+       </div>
+       <div class="from-group">
+            {{ profile.errors }}
+            <label>Aniversário: </label>
+            {{ profile.birthdate }}
+       </div>
+       <div class="form-group">
+            {{ profile.errors }}
+            <label>Foto de Perfil: </label>
+            {{ profile.profile_picture }}
+       </div> 
+
+        <button type="submit">Editar</button>
+    </form>
+{% endblock %}
