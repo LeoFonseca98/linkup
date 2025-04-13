@@ -3,6 +3,8 @@
 import os
 import sys
 
+from dj_database_url import config
+
 
 def main():
     """Run administrative tasks."""
