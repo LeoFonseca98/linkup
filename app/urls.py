@@ -1,12 +1,15 @@
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import redirect
 from django.urls import path
 from posts.views import create_post_view, post_view
-from account.views import register_view, login_view, logout_view, edit_profile_view, profile_view
+from account.views import register_view, login_view, logout_view, edit_profile_view, profile_view, home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('home/', home_view, name='home'),
+    path('', lambda request: redirect('home')),
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
     path('profile/', profile_view, name='profile'),

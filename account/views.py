@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
+def home_view(request):
+    return render(request, "home.html")
+
 def register_view(request):
     if request.method == "POST":
         user_form = UserCreationForm(request.POST)
@@ -63,4 +66,5 @@ def edit_profile_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('home')
+
