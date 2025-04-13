@@ -1,5 +1,3 @@
-
-import app
 from .models import Profile
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import ProfileForm
@@ -11,9 +9,9 @@ from django.shortcuts import render, redirect
 def home_view(request):
     return render(request, "home.html")
 
-@app.route("/healthz")
-def healthz():
-    return "OK", 200
+
+def healthz(request):
+    return render(request, "OK", 200)
 
 
 def register_view(request):
