@@ -1,13 +1,20 @@
 
+import app
 from .models import Profile
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import ProfileForm
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
 def home_view(request):
     return render(request, "home.html")
+
+@app.route("/healthz")
+def healthz():
+    return "OK", 200
+
 
 def register_view(request):
     if request.method == "POST":
@@ -58,6 +65,8 @@ def edit_profile_view(request):
     else:
         profile = ProfileForm()
         return render(request, 'edit_profile.html', {'profile': profile})
+
+
 
 
 
