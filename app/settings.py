@@ -17,7 +17,9 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS = ['*']
+
+#config('ALLOWED_HOSTS', cast=Csv())
 
 
 # Application definition
