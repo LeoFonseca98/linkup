@@ -8,7 +8,7 @@ from account.views import healthz, register_view, login_view, logout_view, edit_
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('healthz', healthz, name='healthz'),
+    path('healthz/', healthz, name='healthz'),
     path('home/', home_view, name='home'),
     path('', lambda request: redirect('home')),
     path('register/', register_view, name='register'),
