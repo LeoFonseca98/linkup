@@ -116,6 +116,13 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+
+# Para servir os arquivos no deploy
+MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -127,9 +134,6 @@ MEDIA_URL = '/media/'
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-print("DEBUG:", DEBUG)
-print("DATABASE_URL lido:", config('DATABASE_URL'))
 
 LOGIN_URL = '/login/'
 HOME_REDIRECT_URL = '/home/'
