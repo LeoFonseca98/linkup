@@ -1,12 +1,14 @@
 from .models import Profile
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .forms import ProfileForm
+from .forms import CustomUserCreationForm, ProfileForm
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
-def home_view(request):
+
+def home_view(request): 
     return render(request, "home.html")
 
 
@@ -16,26 +18,38 @@ def healthz(request):
 
 def register_view(request):
     if request.method == "POST":
-        user_form = UserCreationForm(request.POST)
+        user_form = CustomUserCreationForm(request.POST)
         if user_form.is_valid():
             user_form.save()
+            print(user_form)
             return redirect('login')
         else:
-            user_form = UserCreationForm()
+            user_form = CustomUserCreationForm()
     else: 
-        user_form = UserCreationForm()
+        user_form = CustomUserCreationForm()
     return render(request, "register.html", {'user_form': user_form})
 
 def login_view(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('post')
-        else: 
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        print(email, password)
+
+        try:
+            user = User.objects.get(email=email)
+            user = authenticate(request, username=user.username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('post')
+            else:
+                login_form = AuthenticationForm()
+
+
+        except User.DoesNotExist:
             login_form = AuthenticationForm()
+            return render(request, 'login.html', {
+                'login_form': login_form,
+                'error': 'Email não encontrado.'})     
     else:
         login_form = AuthenticationForm()
     return render(request, 'login.html', {'login_form': login_form})
@@ -66,12 +80,9 @@ def edit_profile_view(request):
 
 
 
-
-
-
-
-
+login_required
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')
+
 

@@ -8,11 +8,10 @@ from account.views import healthz, register_view, login_view, logout_view, edit_
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('healthz/', healthz, name='healthz'),
-    path('home/', home_view, name='home'),
-    path('', lambda request: redirect('home')),
-    path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
+    path('', lambda request: redirect('login')),
+    path('healthz/', healthz, name='healthz'),
+    path('register/', register_view, name='register'),
     path('profile/', profile_view, name='profile'),
     path('logout/', logout_view, name='logout'),
     path('post_form/', create_post_view, name='post_form'),

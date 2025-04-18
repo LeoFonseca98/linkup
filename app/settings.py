@@ -109,7 +109,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -120,8 +125,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 print("DEBUG:", DEBUG)
 print("DATABASE_URL lido:", config('DATABASE_URL'))
 
+LOGIN_URL = '/login/'
+HOME_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = '/login/'  # opcional, pra redirecionar após logout
