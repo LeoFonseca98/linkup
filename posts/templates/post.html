@@ -1,38 +1,324 @@
 {% extends "base.html" %}
 
-<div class="card">
-    {% block content %}
-        <div>
-            <div class="post-box">
-                <input type="text" placeholder="O que está acontecendo..." style="width: 300px; height: 200px; object-fit: cover;">
-                <button>Postar</button>
-            </div>
-            
-            {% for post in posts %}
-                {% csrf_token %}
-                <div class="post">
-                    <h2>{{ post.usuario.username }}</h2>
-                    <p><strong>{{ post.title }}</strong></p>
-                    <p>{{ post.publication_date }}</p>
-                    <p>{{ post.content }}</p>
-                        
-                    {% if post.image %}
-                        <img src="{{ post.image.url }}" alt="Imagem do post" style="width: 300px; height: 200px; object-fit: cover;">
-                    {% else %}
-                        <p>Sem imagem</p>
-                    {% endif %}    
-                    <div>  
-                        <div>
-                            <button>Excluir</button>
-                        </div>
-                        <button><img src="/icons/add.png" alt="adicionar">Comment</button>
-                        <button>Repost</button>
-                        <button>Save</button>
-                        <button>Download</button>
-                    </div>
-                </div>
-            {% endfor %}
-            </div>
+{% block content %}
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a263a;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 350px;
+    background-color: #000;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    font-size: 50px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+}
+
+.sidebar p {
+    font-size: 24px;
+    color: #8899a6;
+    margin: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #1d9bf0;
+    font-weight: 500;
+    font-size: 28px;
+    padding: 20px 24px;
+    border-radius: 20px;
+    transition: background-color 0.2s ease;
+    display: block;
+    width: 100%;
+}
+
+.sidebar ul li a:hover {
+    background-color: #1c2526;
+    color: #1d9bf0;
+}
+
+.sidebar ul li::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+}
+
+/* Ícones para cada item da sidebar (usando emojis como placeholder) */
+.sidebar ul li:nth-child(1)::before { content: '🏠'; }
+.sidebar ul li:nth-child(2)::before { content: '🔍'; }
+.sidebar ul li:nth-child(3)::before { content: '➕'; }
+.sidebar ul li:nth-child(4)::before { content: '🔔'; }
+.sidebar ul li:nth-child(5)::before { content: '💬'; }
+.sidebar ul li:nth-child(6)::before { content: '👤'; }
+.sidebar ul li:nth-child(7)::before { content: '🚪'; }
+
+.post-box {
+    background-color: #16181c;
+    padding: 30px;
+    border-radius: 8px;
+    margin: 35px auto;
+    width: 92%;
+    max-width: 1400px;
+    margin-left: 25rem;
+}
+
+.post-box input[type="text"] {
+    width: 85%;
+    background-color: #202327;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+.post-box button {
+    background-color: #1d9bf0;
+    border: none;
+    padding: 8px 16px;
+    color: white;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 5px;
+}
+
+.post-box button:hover {
+    background-color: #0c7abf;
+}
+
+.sc-post {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 8px;
+    margin: 40px auto;
+    margin-left: 25rem;
+    width: 98%;
+    max-width: 1400px;
+}
+
+.post {
+    background-color: #16181c;
+    border: 1px solid #2f3336;
+    border-radius: 8px;
+    padding: 40px; /* Ajustado para dar mais espaço interno (era 380px, muito grande) */
+    margin-bottom: 40px; /* Aumentado para separar melhor os posts */
+    max-width: 800px; /* Definido um max-width para o post ser visível e completo */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post h2 {
+    font-size: 18px; /* Aumentado para melhor legibilidade */
+    margin: 0 0 10px 0;
+    color: #1d9bf0;
+}
+
+.post p {
+    margin: 10px 0; /* Aumentado para dar mais espaço entre linhas */
+    font-size: 16px; /* Aumentado para melhor legibilidade */
+}
+
+.post img {
+    width: 100%;
+    max-width: 600px; /* Aumentado para que a imagem ocupe mais espaço */
+    height: auto; /* Ajustado para manter proporção */
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.post div {
+    display: flex;
+    gap: 15px; /* Aumentado para separar melhor os botões */
+    margin-top: 15px; /* Ajustado para um valor mais razoável (era 100px) */
+}
+
+.post button {
+    background-color: transparent;
+    color: #1d9bf0;
+    border: none;
+    cursor: pointer;
+    font-size: 16px; /* Aumentado para melhor legibilidade */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px; /* Adicionado padding para botões */
+}
+
+/* Empurra o conteúdo da página principal */
+body {
+    margin-left: 250px;
+}
+
+/* Botão flutuante */
+button.floating-post {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #1d9bf0;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s;
+}
+
+button.floating-post:hover {
+    background-color: #0c7abf;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    body {
+        margin-left: 0;
+    }
+
+    .sidebar {
+        width: 200px;
+        padding: 15px;
+    }
+
+    .post-box, .sc-post, .post {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .post {
+        max-width: 100%; /* Ajuste para telas menores */
+        padding: 20px;
+    }
+
+    button.floating-post {
+        bottom: 10px;
+        right: 10px;
+    }
+}
+
+@media (max-width: 500px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    body {
+        margin-left: 0;
+    }
+
+    .post-box, .sc-post, .post {
+        width: 95%;
+        margin: 10px auto;
+    }
+
+    .post {
+        max-width: 100%; /* Ajuste para telas menores */
+        padding: 15px;
+    }
+
+    .post-box input[type="text"] {
+        font-size: 14px;
+    }
+
+    button.floating-post {
+        display: none;
+    }
+}
+</style>
+
+<div>
+    {% if user.is_authenticated %}
+        <div class="sidebar">
+            <h2>LinkUp</h2>
+            <p>Olá, {{ user.username }}!</p>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Buscar</a></li>
+                <li><a href="{% url 'post_form' %}">Criar</a></li>
+                <li><a href="#">Notificações</a></li>
+                <li><a href="#">Mensagens</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'logout' %}">Sair</a></li>
+            </ul>
         </div>
-    {% endblock %}
+    {% endif %}
+
+    <div class="post-box">
+        <input type="text" placeholder="O que está acontecendo...">
+        <button>Postar</button>
+    </div>
+
+    <div class="sc-post">
+        {% for post in posts %}
+            <div class="post">
+                <h2>{{ post.usuario.username }}</h2>
+                <p>{{ post.publication_date }}</p>
+                <p>{{ post.content }}</p>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Imagem do post">
+                {% else %}
+                    <p>Sem imagem</p>
+                {% endif %}
+                <div>
+                    {% if post.usuario == user %}
+                        <button>Excluir</button>
+                    {% endif %}
+                    <button>Comentar</button>
+                    <button>Repostar</button>
+                    <button>Salvar</button>
+                    <button>Baixar</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button class="floating-post">Postar</button>
 </div>
+
+{% endblock %}

@@ -18,31 +18,16 @@
             background-attachment: fixed;
         }
 
-        
     </style>
+
 </head>
 
-{% if user.is_authenticated %}
-    <div class="sidebar">
-        <h2>LinkUp</h2>
-        <p>Olá, {{ user.username }}!</p>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Buscar</a></li>
-            <li><a href="{% url 'post_form' %}">Criar</a></li>
-            <li><a href="#">Notificações</a></li>
-            <li><a href="#">Mensagens</a></li>
-            <li><a href="{% url 'profile' %}">Profile</a></li>
-            <li><a href="{% url 'logout' %}">Sair</a></li>
-        </ul>
-    </div>
-{% endif %}
 
-<div class="content">
-    {% block content %}
 
-    {% endblock %}
-</div>
+{% block content %}
+
+{% endblock %}
+
 
 </body>
 </html>
